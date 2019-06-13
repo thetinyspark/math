@@ -1,2 +1,2 @@
 # math
-A simple math library
+A simple mathematics library
