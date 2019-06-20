@@ -2,10 +2,22 @@
 A simple mathematics library which provides usefull objects and functions
 
 
-#How to install 
+## How to install 
 npm install @thetinyspark/maths
 
-#License 
+## How to build, doc, test
+
+``bash
+npm run build
+npm run doc
+npm run test
+
+# or for doing everything in one command: 
+npm run deploy
+``
+
+
+## License 
 MIT License
 
 Copyright (c) 2019 The Tiny Spark
