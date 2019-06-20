@@ -16,6 +16,9 @@ npm run test
 npm run deploy
 ```
 
+## Documenation 
+Documentation is available in the dist/docs folder
+
 
 ## License 
 MIT License
