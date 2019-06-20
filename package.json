@@ -1,0 +1,30 @@
+{
+  "name": "@thetinyspark/maths",
+  "version": "1.0.0",
+  "description": "A simple & usefull maths library",
+  "main": "dist/lib/index.js",
+  "type": "dist/lib/index.ts",
+  "scripts": {
+    "build": "tsc", 
+    "test": "npm run build && jasmine",
+    "doc": "node_modules/.bin/typedoc --out dist/docs --mode modules --exclude spec/**/*",
+    "deploy": "npm run test && npm run doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thetinyspark/maths.git"
+  },
+  "author": "thetinyspark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thetinyspark/maths/issues"
+  },
+  "homepage": "https://github.com/thetinyspark/maths#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jasmine": "^3.3.13",
+    "jasmine": "^3.4.0",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.5.2"
+  }
+}
