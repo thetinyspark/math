@@ -7,14 +7,14 @@ npm install @thetinyspark/maths
 
 ## How to build, doc, test
 
-``bash
+```bash
 npm run build
 npm run doc
 npm run test
 
 # or for doing everything in one command: 
 npm run deploy
-``
+```
 
 
 ## License 
