@@ -1,4 +1,4 @@
-import { FAST_COS, FAST_SIN, DEG_TO_RAD } from "./utils";
+import { FAST_COS, FAST_SIN, DEG_TO_RAD, FAST_TAN } from "./utils";
 import { Point } from "./Point";
 
 /*
@@ -391,14 +391,10 @@ export class Matrix2D {
 		skewX = skewX % 360;
 		skewY = skewY % 360;
 
-		return this.append(
-			FAST_COS[skewY],
-			FAST_SIN[skewY],
-			-FAST_SIN[skewX],
-			FAST_COS[skewX],
-			0,
-			0
-		);
+		skewX = ( skewX < 0 ) ? 360 + skewX : skewX;
+		skewY = ( skewY < 0 ) ? 360 + skewY : skewY;
+
+		return this.append(1,FAST_TAN[skewY], -FAST_TAN[skewX],1,0, 0);
 	};
 
 	/**
@@ -495,10 +491,12 @@ export class Matrix2D {
 	 * @param {Object} target The object to apply the transform properties to. If null, then a new object will be returned.
 	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
 	*/
-	public decompose(target: any): any {
+	public decompose(target: any = null): any {
 		// TODO: it would be nice to be able to solve for whether the matrix can be decomposed into only scale/rotation
 		// even when scale is negative
-		if (target == null) { target = {}; }
+		if (target == null) 
+			target = {};
+
 		target.x = this.tx;
 		target.y = this.ty;
 		target.scaleX = Math.sqrt(this.a * this.a + this.b * this.b);
@@ -558,6 +556,16 @@ export class Matrix2D {
 		obj.ty = this.ty;
 
 		return obj;
+	};
+
+	/**
+	* @method toArray
+	* @memberOf Matrix2D
+	* @description Exports the current Matrix2D to a flat array of data
+	* @returns Array a flat array of data
+	**/
+	public toArray(): number[]{
+		return [this.a, this.b, this.c, this.d, this.tx, this.ty];
 	};
 
 	/**
