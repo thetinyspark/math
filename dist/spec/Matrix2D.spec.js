@@ -89,6 +89,13 @@ describe('test Matrix2D class', function () {
         expect(point.x).toBe(200);
         expect(point.y).toBe(0);
     });
+    it("should skew the point properly", function () {
+        var mat = new lib_1.Matrix2D();
+        var point = mat.skew(-45, 0).transformPoint(0, 100);
+        expect(point.x).toEqual(100);
+        point = mat.identity().skew(0, 45).transformPoint(100, 0);
+        expect(point.y).toEqual(100);
+    });
     it("should translate, scale and  rotate around pivot properly", function () {
         var pivot = new Point_1.Point(100, 100);
         var point = new Point_1.Point(50, 50);
@@ -113,43 +120,6 @@ describe('test Matrix2D class', function () {
         expect(mat1.d).toEqual(mat2.d);
         expect(mat1.tx).toEqual(mat2.tx);
         expect(mat1.ty).toEqual(mat2.ty);
-    });
-    it("should append transformation properly", function () {
-        var mat = new lib_1.Matrix2D();
-        var point = new Point_1.Point(0, 0);
-        mat.identity().append(2, 0, 0, 2, 0, 0).append(1, 0, 0, 1, 100, 100).transformPoint(0, 0, point);
-        expect(point.x).toEqual(200);
-        expect(point.y).toEqual(200);
-        mat.identity().append(1, 0, 0, 1, 100, 100).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
-        expect(point.x).toEqual(100);
-        expect(point.y).toEqual(100);
-        mat.identity().rotate(90).append(1, 0, 0, 1, 100, 100).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
-        expect(point.x).toEqual(-100);
-        expect(point.y).toEqual(100);
-        mat.identity().append(1, 0, 0, 1, 100, 100).rotate(90).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
-        expect(point.x).toEqual(100);
-        expect(point.y).toEqual(100);
-    });
-    it("should prepend transformation properly", function () {
-        var mat = new lib_1.Matrix2D();
-        var point = new Point_1.Point(0, 0);
-        mat.identity().append(2, 0, 0, 2, 0, 0).prepend(1, 0, 0, 1, 100, 100).transformPoint(0, 0, point);
-        expect(point.x).toEqual(100);
-        expect(point.y).toEqual(100);
-        mat.identity().append(1, 0, 0, 1, 100, 100).prepend(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
-        expect(point.x).toEqual(200);
-        expect(point.y).toEqual(200);
-    });
-    it("appendTransform should be a combination of translate , pivot, scale, skew, rotate, translate back pivot", function () {
-        var mat = new lib_1.Matrix2D();
-        var mat2 = new lib_1.Matrix2D();
-        mat.identity().append(1, 0, 0, 1, 100, 100).append(1, 0, 0, 1, 150, 150).append(2, 0, 0, 2, 0, 0)
-            .append(utils_1.FAST_COS[10], utils_1.FAST_SIN[10], -utils_1.FAST_SIN[15], utils_1.FAST_COS[15], 0, 0)
-            .append(utils_1.FAST_COS[10], utils_1.FAST_SIN[10], -utils_1.FAST_SIN[10], utils_1.FAST_COS[10], 0, 0)
-            .append(1, 0, 0, 1, -150, -150);
-        mat2 = mat.clone();
-        mat.identity().appendTransform(100, 100, 2, 2, 10, 15, 10, 150, 150);
-        expect(mat.toJSON()).toEqual(mat2.toJSON());
     });
     it("should save and restore matrices properly", function () {
         var mat = new lib_1.Matrix2D();
@@ -185,5 +155,89 @@ describe('test Matrix2D class', function () {
         mat0.translate(100, 100).scale(2, 2).rotate(90);
         mat1.combine([mat2, mat3]);
         expect(mat0.toJSON()).toEqual(mat1.toJSON());
+    });
+    it("should initialize properly", function () {
+        var mat = new lib_1.Matrix2D();
+        mat.initialize(2, 2, 2, 2, 2, 2);
+        expect(mat.a).toEqual(2);
+        expect(mat.b).toEqual(2);
+        expect(mat.c).toEqual(2);
+        expect(mat.d).toEqual(2);
+        expect(mat.tx).toEqual(2);
+        expect(mat.ty).toEqual(2);
+    });
+    it("should append transformation properly", function () {
+        var mat = new lib_1.Matrix2D();
+        var point = new Point_1.Point(0, 0);
+        mat.identity().append(2, 0, 0, 2, 0, 0).append(1, 0, 0, 1, 100, 100).transformPoint(0, 0, point);
+        expect(point.x).toEqual(200);
+        expect(point.y).toEqual(200);
+        mat.identity().append(1, 0, 0, 1, 100, 100).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
+        expect(point.x).toEqual(100);
+        expect(point.y).toEqual(100);
+        mat.identity().rotate(90).append(1, 0, 0, 1, 100, 100).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
+        expect(point.x).toEqual(-100);
+        expect(point.y).toEqual(100);
+        mat.identity().append(1, 0, 0, 1, 100, 100).rotate(90).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
+        expect(point.x).toEqual(100);
+        expect(point.y).toEqual(100);
+    });
+    it("should prepend transformation properly", function () {
+        var mat = new lib_1.Matrix2D();
+        var point = new Point_1.Point(0, 0);
+        mat.identity().append(2, 0, 0, 2, 0, 0).prepend(1, 0, 0, 1, 100, 100).transformPoint(0, 0, point);
+        expect(point.x).toEqual(100);
+        expect(point.y).toEqual(100);
+        mat.identity().append(1, 0, 0, 1, 100, 100).prepend(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
+        expect(point.x).toEqual(200);
+        expect(point.y).toEqual(200);
+    });
+    it("should append matrix properly", function () {
+        var mat = new lib_1.Matrix2D();
+        var point = new Point_1.Point(0, 0);
+        mat.identity()
+            .appendMatrix(new lib_1.Matrix2D(2, 0, 0, 2, 0, 0))
+            .appendMatrix(new lib_1.Matrix2D(1, 0, 0, 1, 100, 100))
+            .transformPoint(0, 0, point);
+        expect(point.x).toEqual(200);
+        expect(point.y).toEqual(200);
+    });
+    it("should prepend matrix properly", function () {
+        var mat = new lib_1.Matrix2D();
+        var point = new Point_1.Point(0, 0);
+        mat.identity()
+            .appendMatrix(new lib_1.Matrix2D(2, 0, 0, 2, 0, 0))
+            .prependMatrix(new lib_1.Matrix2D(1, 0, 0, 1, 100, 100)).transformPoint(0, 0, point);
+        expect(point.x).toEqual(100);
+        expect(point.y).toEqual(100);
+    });
+    it("appendTransform should be a combination of translate , pivot, scale, skew, rotate, translate back pivot", function () {
+        var mat = new lib_1.Matrix2D();
+        var mat2 = new lib_1.Matrix2D();
+        mat.identity().append(1, 0, 0, 1, 100, 100).append(1, 0, 0, 1, 150, 150).append(2, 0, 0, 2, 0, 0)
+            .append(utils_1.FAST_COS[10], utils_1.FAST_SIN[10], -utils_1.FAST_SIN[15], utils_1.FAST_COS[15], 0, 0)
+            .append(utils_1.FAST_COS[10], utils_1.FAST_SIN[10], -utils_1.FAST_SIN[10], utils_1.FAST_COS[10], 0, 0)
+            .append(1, 0, 0, 1, -150, -150);
+        mat2 = mat.clone();
+        mat.identity().appendTransform(100, 100, 2, 2, 10, 15, 10, 150, 150);
+        expect(mat.toJSON()).toEqual(mat2.toJSON());
+    });
+    it("should invert the matrix properly", function () {
+        var mat1 = new lib_1.Matrix2D();
+        var mat2 = new lib_1.Matrix2D();
+        mat1.translate(100, 100).scale(2, 2).rotate(50);
+        mat2.copy(mat1).invert();
+        expect(mat1.appendMatrix(mat2).isIdentity()).toBe(true);
+    });
+    it("should decompose the matrix properly", function () {
+        var mat1 = new lib_1.Matrix2D();
+        var transform = null;
+        var point1 = new Point_1.Point();
+        var point2 = new Point_1.Point();
+        mat1.translate(100, 100).scale(2, 2).rotate(90).transformPoint(0, 0, point1);
+        transform = mat1.decompose();
+        mat1.identity().appendTransform(transform.x, transform.y, transform.scaleX, transform.scaleY, transform.rotation, transform.skewX, transform.skewY, 0, 0).transformPoint(0, 0, point2);
+        expect(point1.x).toEqual(point2.x);
+        expect(point1.y).toEqual(point2.y);
     });
 });

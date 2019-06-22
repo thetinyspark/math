@@ -134,6 +134,20 @@ describe('test Matrix2D class', () => {
         }
     );
 
+    
+    it(
+        "should skew the point properly",
+        () => {
+            let mat: Matrix2D = new Matrix2D();
+            let point: Point = mat.skew(-45, 0).transformPoint(0, 100);
+            expect(point.x).toEqual(100);
+
+            point = mat.identity().skew(0,45).transformPoint(100,0);
+            expect(point.y).toEqual(100);
+        }
+    );
+
+
 
     it(
         "should translate, scale and  rotate around pivot properly",
@@ -177,6 +191,85 @@ describe('test Matrix2D class', () => {
     );
 
     it(
+        "should save and restore matrices properly",
+        () => {
+            let mat: Matrix2D = new Matrix2D();
+
+            mat.save();
+            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
+
+            mat.save();
+            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
+
+            mat.save();
+            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
+
+            expect(mat.a).not.toEqual(1);
+
+            mat.restore();
+            expect(mat.a).not.toEqual(1);
+
+            mat.restore();
+            expect(mat.a).not.toEqual(1);
+
+            mat.restore();
+            expect(mat.a).toEqual(1);
+        }
+    );
+
+    it(
+        "should copy the matrix properly",
+        () => {
+            let mat1: Matrix2D = new Matrix2D();
+            let mat2: Matrix2D = new Matrix2D();
+
+            mat1.appendTransform(10, 10, 10, 10, 10, 10, 10, 10, 10);
+            mat2.copy(mat1);
+
+            expect(mat1.toJSON()).toEqual(mat2.toJSON());
+        }
+    );
+
+    it(
+        "should combine matrices properly",
+        () => {
+
+            let mat0: Matrix2D = new Matrix2D();
+            let mat1: Matrix2D = new Matrix2D();
+            let mat2: Matrix2D = new Matrix2D();
+            let mat3: Matrix2D = new Matrix2D();
+
+            mat1.translate(100, 100);
+            mat2.scale(2, 2);
+            mat3.rotate(90);
+
+            mat0.translate(100, 100).scale(2, 2).rotate(90);
+            mat1.combine([mat2, mat3]);
+
+            expect(mat0.toJSON()).toEqual(mat1.toJSON());
+        }
+    );
+
+
+    it(
+        "should initialize properly",
+        () => {
+
+            let mat: Matrix2D = new Matrix2D();
+            mat.initialize(2, 2, 2, 2, 2, 2);
+
+            expect(mat.a).toEqual(2);
+            expect(mat.b).toEqual(2);
+            expect(mat.c).toEqual(2);
+            expect(mat.d).toEqual(2);
+            expect(mat.tx).toEqual(2);
+            expect(mat.ty).toEqual(2);
+        }
+    );
+
+
+
+    it(
         "should append transformation properly",
         () => {
             let mat: Matrix2D = new Matrix2D();
@@ -216,6 +309,36 @@ describe('test Matrix2D class', () => {
         }
     );
 
+    it(
+        "should append matrix properly",
+        () => {
+            let mat: Matrix2D = new Matrix2D();
+            let point: Point = new Point(0, 0);
+
+            mat.identity()
+                .appendMatrix(new Matrix2D(2, 0, 0, 2, 0, 0))
+                .appendMatrix(new Matrix2D(1, 0, 0, 1, 100, 100))
+                .transformPoint(0, 0, point);
+
+            expect(point.x).toEqual(200);
+            expect(point.y).toEqual(200);
+        }
+    );
+
+    it(
+        "should prepend matrix properly",
+        () => {
+            let mat: Matrix2D = new Matrix2D();
+            let point: Point = new Point(0, 0);
+
+            mat.identity()
+                .appendMatrix(new Matrix2D(2, 0, 0, 2, 0, 0))
+                .prependMatrix(new Matrix2D(1, 0, 0, 1, 100, 100)).transformPoint(0, 0, point);
+            expect(point.x).toEqual(100);
+            expect(point.y).toEqual(100);
+        }
+    );
+
     it("appendTransform should be a combination of translate , pivot, scale, skew, rotate, translate back pivot",
         () => {
 
@@ -249,64 +372,50 @@ describe('test Matrix2D class', () => {
         }
     );
 
-    it(
-        "should save and restore matrices properly",
+
+    it("should invert the matrix properly",
         () => {
-            let mat: Matrix2D = new Matrix2D();
 
-            mat.save();
-            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
-
-            mat.save();
-            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
-
-            mat.save();
-            mat.appendTransform(100, 100, 100, 100, 100, 100, 100, 100, 100);
-
-            expect(mat.a).not.toEqual(1);
-
-            mat.restore();
-            expect(mat.a).not.toEqual(1);
-
-            mat.restore();
-            expect(mat.a).not.toEqual(1);
-
-            mat.restore();
-            expect(mat.a).toEqual(1);
-        }
-    );
-
-    it(
-        "should copy the matrix properly",
-        () => {
             let mat1: Matrix2D = new Matrix2D();
-            let mat2:Matrix2D = new Matrix2D();
+            let mat2: Matrix2D = new Matrix2D();
 
-            mat1.appendTransform(10,10,10,10,10,10,10,10,10);
-            mat2.copy(mat1);
+            mat1.translate(100, 100).scale(2, 2).rotate(50);
+            mat2.copy(mat1).invert();
 
-            expect(mat1.toJSON()).toEqual(mat2.toJSON());
+            expect(mat1.appendMatrix(mat2).isIdentity()).toBe(true);
+
         }
     );
 
-    it(
-        "should combine matrices properly",
+
+    it("should decompose the matrix properly",
         () => {
 
-            let mat0:Matrix2D = new Matrix2D();
-            let mat1:Matrix2D = new Matrix2D();
-            let mat2:Matrix2D = new Matrix2D();
-            let mat3:Matrix2D = new Matrix2D();
+            let mat1: Matrix2D = new Matrix2D();
+            let transform: any = null;
+            let point1: Point = new Point();
+            let point2: Point = new Point();
 
-            mat1.translate(100,100);
-            mat2.scale(2,2);
-            mat3.rotate(90);
-            
-            mat0.translate(100,100).scale(2,2).rotate(90);
-            mat1.combine([mat2,mat3]);
+            mat1.translate(100, 100).scale(2, 2).rotate(90).transformPoint(0, 0, point1);
+            transform = mat1.decompose();
 
-            expect(mat0.toJSON()).toEqual(mat1.toJSON());
+            mat1.identity().appendTransform(
+                transform.x,
+                transform.y,
+                transform.scaleX,
+                transform.scaleY,
+                transform.rotation,
+                transform.skewX,
+                transform.skewY,
+                0,
+                0
+            ).transformPoint(0, 0, point2);
+
+            expect(point1.x).toEqual(point2.x);
+            expect(point1.y).toEqual(point2.y);
         }
     );
+
+
 
 });

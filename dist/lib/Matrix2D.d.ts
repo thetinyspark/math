@@ -237,7 +237,7 @@ export declare class Matrix2D {
      * @param {Object} target The object to apply the transform properties to. If null, then a new object will be returned.
      * @return {Matrix2D} This matrix. Useful for chaining method calls.
     */
-    decompose(target: any): any;
+    decompose(target?: any): any;
     /**
      * Copies all properties from the specified matrix to this matrix.
      * @method copy
@@ -260,6 +260,13 @@ export declare class Matrix2D {
     * @returns {Object} a flat Object
     **/
     toFlatObject(): any;
+    /**
+    * @method toArray
+    * @memberOf Matrix2D
+    * @description Exports the current Matrix2D to a flat array of data
+    * @returns Array a flat array of data
+    **/
+    toArray(): number[];
     /**
      * Returns a string representation of this object.
      * @method toString

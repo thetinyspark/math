@@ -371,7 +371,9 @@ var Matrix2D = /** @class */ (function () {
     Matrix2D.prototype.skew = function (skewX, skewY) {
         skewX = skewX % 360;
         skewY = skewY % 360;
-        return this.append(utils_1.FAST_COS[skewY], utils_1.FAST_SIN[skewY], -utils_1.FAST_SIN[skewX], utils_1.FAST_COS[skewX], 0, 0);
+        skewX = (skewX < 0) ? 360 + skewX : skewX;
+        skewY = (skewY < 0) ? 360 + skewY : skewY;
+        return this.append(1, utils_1.FAST_TAN[skewY], -utils_1.FAST_TAN[skewX], 1, 0, 0);
     };
     ;
     /**
@@ -469,11 +471,11 @@ var Matrix2D = /** @class */ (function () {
      * @return {Matrix2D} This matrix. Useful for chaining method calls.
     */
     Matrix2D.prototype.decompose = function (target) {
+        if (target === void 0) { target = null; }
         // TODO: it would be nice to be able to solve for whether the matrix can be decomposed into only scale/rotation
         // even when scale is negative
-        if (target == null) {
+        if (target == null)
             target = {};
-        }
         target.x = this.tx;
         target.y = this.ty;
         target.scaleX = Math.sqrt(this.a * this.a + this.b * this.b);
@@ -530,6 +532,16 @@ var Matrix2D = /** @class */ (function () {
         obj.tx = this.tx;
         obj.ty = this.ty;
         return obj;
+    };
+    ;
+    /**
+    * @method toArray
+    * @memberOf Matrix2D
+    * @description Exports the current Matrix2D to a flat array of data
+    * @returns Array a flat array of data
+    **/
+    Matrix2D.prototype.toArray = function () {
+        return [this.a, this.b, this.c, this.d, this.tx, this.ty];
     };
     ;
     /**
