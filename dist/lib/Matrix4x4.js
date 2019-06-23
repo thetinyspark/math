@@ -29,7 +29,7 @@ var utils_1 = require("./utils");
 */
 /**
 * @class Matrix4x4
-* @description A Basic implementation of a Matrix4x4
+* @description A Basic implementation of a Matrix4x4 (left handed)
 * @memberOf
 * @constructor
 **/
@@ -80,6 +80,7 @@ var Matrix4x4 = /** @class */ (function () {
     * @param {number} n
     * @param {number} o
     * @param {number} p
+    * @returns {Matrix4x4} this matrix, usefull for chaining
     **/
     Matrix4x4.prototype.init = function (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {
         this.data = [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
@@ -111,6 +112,9 @@ var Matrix4x4 = /** @class */ (function () {
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
     Matrix4x4.prototype.translate = function (tx, ty, tz) {
+        if (tx === void 0) { tx = 0; }
+        if (ty === void 0) { ty = 0; }
+        if (tz === void 0) { tz = 0; }
         TRANSLATE_MATRIX.data[3] = tx;
         TRANSLATE_MATRIX.data[7] = ty;
         TRANSLATE_MATRIX.data[11] = tz;
@@ -128,11 +132,13 @@ var Matrix4x4 = /** @class */ (function () {
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
     Matrix4x4.prototype.scale = function (sx, sy, sz) {
+        if (sx === void 0) { sx = 1; }
+        if (sy === void 0) { sy = 1; }
+        if (sz === void 0) { sz = 1; }
         SCALE_MATRIX.data[0] = sx;
         SCALE_MATRIX.data[5] = sy;
         SCALE_MATRIX.data[10] = sz;
-        this.appendMatrix(SCALE_MATRIX);
-        return this;
+        return this.appendMatrix(SCALE_MATRIX);
     };
     ;
     /**
@@ -145,28 +151,10 @@ var Matrix4x4 = /** @class */ (function () {
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
     Matrix4x4.prototype.rotate = function (rx, ry, rz) {
-        var c = utils_1.FAST_COS[rx];
-        var s = utils_1.FAST_SIN[rx];
-        ROTATION_X_MATRIX.data[5] = c;
-        ROTATION_X_MATRIX.data[6] = -s;
-        ROTATION_X_MATRIX.data[9] = s;
-        ROTATION_X_MATRIX.data[10] = c;
-        this.appendMatrix(ROTATION_X_MATRIX);
-        c = utils_1.FAST_COS[ry];
-        s = utils_1.FAST_SIN[ry];
-        ROTATION_Y_MATRIX.data[0] = c;
-        ROTATION_Y_MATRIX.data[2] = -s;
-        ROTATION_Y_MATRIX.data[8] = s;
-        ROTATION_Y_MATRIX.data[10] = c;
-        this.appendMatrix(ROTATION_Y_MATRIX);
-        c = utils_1.FAST_COS[rz];
-        s = utils_1.FAST_SIN[rz];
-        ROTATION_Z_MATRIX.data[0] = c;
-        ROTATION_Z_MATRIX.data[1] = -s;
-        ROTATION_Z_MATRIX.data[4] = s;
-        ROTATION_Z_MATRIX.data[5] = c;
-        this.appendMatrix(ROTATION_Z_MATRIX);
-        return this;
+        if (rx === void 0) { rx = 0; }
+        if (ry === void 0) { ry = 0; }
+        if (rz === void 0) { rz = 0; }
+        return this.rotateX(rx).rotateY(ry).rotateZ(rz);
     };
     ;
     /**
@@ -180,8 +168,8 @@ var Matrix4x4 = /** @class */ (function () {
         var c = utils_1.FAST_COS[p_rotation];
         var s = utils_1.FAST_SIN[p_rotation];
         ROTATION_X_MATRIX.data[5] = c;
-        ROTATION_X_MATRIX.data[6] = -s;
-        ROTATION_X_MATRIX.data[9] = s;
+        ROTATION_X_MATRIX.data[6] = s;
+        ROTATION_X_MATRIX.data[9] = -s;
         ROTATION_X_MATRIX.data[10] = c;
         this.appendMatrix(ROTATION_X_MATRIX);
         return this;
@@ -216,8 +204,8 @@ var Matrix4x4 = /** @class */ (function () {
         var c = utils_1.FAST_COS[p_rotation];
         var s = utils_1.FAST_SIN[p_rotation];
         ROTATION_Z_MATRIX.data[0] = c;
-        ROTATION_Z_MATRIX.data[1] = -s;
-        ROTATION_Z_MATRIX.data[4] = s;
+        ROTATION_Z_MATRIX.data[1] = s;
+        ROTATION_Z_MATRIX.data[4] = -s;
         ROTATION_Z_MATRIX.data[5] = c;
         this.appendMatrix(ROTATION_Z_MATRIX);
         return this;
@@ -271,6 +259,18 @@ var Matrix4x4 = /** @class */ (function () {
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
     Matrix4x4.prototype.appendTransform = function (x, y, z, scaleX, scaleY, scaleZ, rotationX, rotationY, rotationZ, pivotX, pivotY, pivotZ) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (z === void 0) { z = 0; }
+        if (scaleX === void 0) { scaleX = 1; }
+        if (scaleY === void 0) { scaleY = 1; }
+        if (scaleZ === void 0) { scaleZ = 1; }
+        if (rotationX === void 0) { rotationX = 0; }
+        if (rotationY === void 0) { rotationY = 0; }
+        if (rotationZ === void 0) { rotationZ = 0; }
+        if (pivotX === void 0) { pivotX = 0; }
+        if (pivotY === void 0) { pivotY = 0; }
+        if (pivotZ === void 0) { pivotZ = 0; }
         return this.translate(x + pivotX, y + pivotY, z + pivotZ)
             .scale(scaleX, scaleY, scaleZ)
             .rotate(rotationX, rotationY, rotationZ)
@@ -542,7 +542,7 @@ var Matrix4x4 = /** @class */ (function () {
      * @memberOf Matrix4x4
      * @return {String} a string representation of the instance.
      **/
-    Matrix4x4.prototype.str = function () {
+    Matrix4x4.prototype.toString = function () {
         var data = this.data;
         return '[\n' + data[0] + ', ' + data[1] + ', ' + data[2] + ', ' + data[3] +
             '\n, ' + data[4] + ', ' + data[5] + ', ' + data[6] + ', ' + data[7] +
@@ -608,8 +608,8 @@ var Matrix4x4 = /** @class */ (function () {
     return Matrix4x4;
 }());
 exports.Matrix4x4 = Matrix4x4;
-var ROTATION_X_MATRIX = new Matrix4x4(1, 0, 0, 0, 0, utils_1.FAST_COS[0], -utils_1.FAST_SIN[0], 0, 0, utils_1.FAST_SIN[0], utils_1.FAST_COS[0], 0, 0, 0, 0, 1);
+var ROTATION_X_MATRIX = new Matrix4x4(1, 0, 0, 0, 0, utils_1.FAST_COS[0], utils_1.FAST_SIN[0], 0, 0, -utils_1.FAST_SIN[0], utils_1.FAST_COS[0], 0, 0, 0, 0, 1);
 var ROTATION_Y_MATRIX = new Matrix4x4(utils_1.FAST_COS[0], 0, -utils_1.FAST_SIN[0], 0, 0, 1, 0, 0, utils_1.FAST_SIN[0], 0, utils_1.FAST_COS[0], 0, 0, 0, 0, 1);
-var ROTATION_Z_MATRIX = new Matrix4x4(utils_1.FAST_COS[0], -utils_1.FAST_SIN[0], 0, 0, utils_1.FAST_SIN[0], utils_1.FAST_COS[0], 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+var ROTATION_Z_MATRIX = new Matrix4x4(utils_1.FAST_COS[0], utils_1.FAST_SIN[0], 0, 0, -utils_1.FAST_SIN[0], utils_1.FAST_COS[0], 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 var TRANSLATE_MATRIX = new Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 var SCALE_MATRIX = new Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);

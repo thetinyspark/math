@@ -2,7 +2,7 @@ import { Matrix2D } from './Matrix2D';
 import { Point3D } from './Point3D';
 /**
 * @class Matrix4x4
-* @description A Basic implementation of a Matrix4x4
+* @description A Basic implementation of a Matrix4x4 (left handed)
 * @memberOf
 * @constructor
 **/
@@ -35,6 +35,7 @@ export declare class Matrix4x4 {
     * @param {number} n
     * @param {number} o
     * @param {number} p
+    * @returns {Matrix4x4} this matrix, usefull for chaining
     **/
     init(a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number, p: number): Matrix4x4;
     /**
@@ -53,7 +54,7 @@ export declare class Matrix4x4 {
     * @param {number} tz
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
-    translate(tx: number, ty: number, tz: number): Matrix4x4;
+    translate(tx?: number, ty?: number, tz?: number): Matrix4x4;
     /**
     * @method scale
     * @memberOf Matrix4x4
@@ -63,7 +64,7 @@ export declare class Matrix4x4 {
     * @param {number} sz
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
-    scale(sx: number, sy: number, sz: number): Matrix4x4;
+    scale(sx?: number, sy?: number, sz?: number): Matrix4x4;
     /**
     * @method rotate
     * @memberOf Matrix4x4
@@ -73,7 +74,7 @@ export declare class Matrix4x4 {
     * @param {number} rz
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
-    rotate(rx: number, ry: number, rz: number): Matrix4x4;
+    rotate(rx?: number, ry?: number, rz?: number): Matrix4x4;
     /**
     * @method rotateX
     * @memberOf Matrix4x4
@@ -125,7 +126,7 @@ export declare class Matrix4x4 {
     * @param {number} pivotZ
     * @returns {Matrix4x4} This instance. Useful for chaining method calls.
     **/
-    appendTransform(x: number, y: number, z: number, scaleX: number, scaleY: number, scaleZ: number, rotationX: number, rotationY: number, rotationZ: number, pivotX: number, pivotY: number, pivotZ: number): Matrix4x4;
+    appendTransform(x?: number, y?: number, z?: number, scaleX?: number, scaleY?: number, scaleZ?: number, rotationX?: number, rotationY?: number, rotationZ?: number, pivotX?: number, pivotY?: number, pivotZ?: number): Matrix4x4;
     /**
      * Prepends the specified matrix with this matrix.
      * @method prependMatrix
@@ -197,7 +198,7 @@ export declare class Matrix4x4 {
      * @memberOf Matrix4x4
      * @return {String} a string representation of the instance.
      **/
-    str(): string;
+    toString(): string;
     /**
      * Transforms a Point3D according to this matrix.
      * @method transformPoint3D
