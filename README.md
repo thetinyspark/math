@@ -17,7 +17,7 @@ npm run deploy
 ```
 
 ## Documentation 
-Documentation is available in the dist/docs folder
+Documentation is available in the "dist/docs" folder
 
 
 ## License 
