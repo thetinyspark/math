@@ -588,6 +588,16 @@ export class Matrix4x4 {
 			'\n, ' + data[12] + ', ' + data[13] + ', ' + data[14] + ', ' + data[15] + ']';
 	};
 
+	/**
+	 * Returns a string JSON representation of this object.
+	 * @method toJSON
+	 * @memberOf Matrix4x4
+	 * @return {String} a string representation of the matrix4x4 data object (JSON format)
+	 **/
+	public toJSON(): string {
+		return JSON.stringify(this.data);
+	};
+
 
 	/**
 	 * Transforms a Point3D according to this matrix.

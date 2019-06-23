@@ -45,10 +45,31 @@ export class Point {
 	 * @param {number} y the y value of the point on the y axis
 	 * @constructor
 	 **/
-	constructor(x:number = 0, y:number = 0) {
-		this.x = x; 
+	constructor(x: number = 0, y: number = 0) {
+		this.x = x;
 		this.y = y;
 	}
+
+	/**
+	 * Returns a string JSON representation of this object.
+	 * @method toJSON
+	 * @memberOf Point
+	 * @return {String} a string representation of the instance (JSON format)
+	 **/
+	public toJSON(): string {
+		return JSON.stringify(this);
+	};
+
+	
+	/**
+	 * Returns a clone of the Point instance.
+	 * @method clone
+	 * @memberOf Point
+	 * @return {Point} a clone of the Point instance.
+	 **/
+	public clone(): Point {
+		return new Point(this.x, this.y);
+	};
 
 	/**
 	* @method getDistanceBetween
@@ -58,10 +79,10 @@ export class Point {
 	* @param {Point} pointB
 	* @returns {number}
 	**/
-	public static getDistanceBetween(pointA:Point, pointB:Point):number {
-		let distX:number = (pointB.x - pointA.x) * (pointB.x - pointA.x);
-		let distY:number = (pointB.y - pointA.y) * (pointB.y - pointA.y);
-		let segLength:number = Math.sqrt(distX + distY);
+	public static getDistanceBetween(pointA: Point, pointB: Point): number {
+		let distX: number = (pointB.x - pointA.x) * (pointB.x - pointA.x);
+		let distY: number = (pointB.y - pointA.y) * (pointB.y - pointA.y);
+		let segLength: number = Math.sqrt(distX + distY);
 		return segLength;
 	};
 
