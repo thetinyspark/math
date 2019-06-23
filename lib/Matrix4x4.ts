@@ -31,7 +31,7 @@ import { FAST_COS, FAST_SIN } from './utils';
 
 /**
 * @class Matrix4x4
-* @description A Basic implementation of a Matrix4x4 
+* @description A Basic implementation of a Matrix4x4 (left handed)
 * @memberOf 
 * @constructor
 **/
@@ -79,6 +79,7 @@ export class Matrix4x4 {
 	* @param {number} n
 	* @param {number} o
 	* @param {number} p
+	* @returns {Matrix4x4} this matrix, usefull for chaining
 	**/
 	public init(
 		a: number, b: number, c: number, d: number,
@@ -117,7 +118,7 @@ export class Matrix4x4 {
 	* @param {number} tz
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
-	public translate(tx: number, ty: number, tz: number): Matrix4x4 {
+	public translate(tx: number = 0, ty: number = 0, tz: number = 0): Matrix4x4 {
 		TRANSLATE_MATRIX.data[3] = tx;
 		TRANSLATE_MATRIX.data[7] = ty;
 		TRANSLATE_MATRIX.data[11] = tz;
@@ -135,13 +136,12 @@ export class Matrix4x4 {
 	* @param {number} sz
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
-	public scale(sx: number, sy: number, sz: number): Matrix4x4 {
+	public scale(sx: number = 1, sy: number = 1, sz: number = 1): Matrix4x4 {
 		SCALE_MATRIX.data[0] = sx;
 		SCALE_MATRIX.data[5] = sy;
 		SCALE_MATRIX.data[10] = sz;
 
-		this.appendMatrix(SCALE_MATRIX);
-		return this;
+		return this.appendMatrix(SCALE_MATRIX);
 	};
 
 	/**
@@ -153,37 +153,8 @@ export class Matrix4x4 {
 	* @param {number} rz
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
-	public rotate(rx: number, ry: number, rz: number): Matrix4x4 {
-		let c = FAST_COS[rx];
-		let s = FAST_SIN[rx];
-
-		ROTATION_X_MATRIX.data[5] = c;
-		ROTATION_X_MATRIX.data[6] = -s;
-		ROTATION_X_MATRIX.data[9] = s;
-		ROTATION_X_MATRIX.data[10] = c;
-
-		this.appendMatrix(ROTATION_X_MATRIX);
-
-		c = FAST_COS[ry];
-		s = FAST_SIN[ry];
-
-		ROTATION_Y_MATRIX.data[0] = c;
-		ROTATION_Y_MATRIX.data[2] = -s;
-		ROTATION_Y_MATRIX.data[8] = s;
-		ROTATION_Y_MATRIX.data[10] = c;
-
-		this.appendMatrix(ROTATION_Y_MATRIX);
-
-		c = FAST_COS[rz];
-		s = FAST_SIN[rz];
-
-		ROTATION_Z_MATRIX.data[0] = c;
-		ROTATION_Z_MATRIX.data[1] = -s;
-		ROTATION_Z_MATRIX.data[4] = s;
-		ROTATION_Z_MATRIX.data[5] = c;
-
-		this.appendMatrix(ROTATION_Z_MATRIX);
-		return this;
+	public rotate(rx: number = 0, ry: number = 0, rz: number = 0): Matrix4x4 {
+		return this.rotateX(rx).rotateY(ry).rotateZ(rz);
 	};
 
 	/**
@@ -194,12 +165,13 @@ export class Matrix4x4 {
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
 	public rotateX(p_rotation: number): Matrix4x4 {
+
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];
 
 		ROTATION_X_MATRIX.data[5] = c;
-		ROTATION_X_MATRIX.data[6] = -s;
-		ROTATION_X_MATRIX.data[9] = s;
+		ROTATION_X_MATRIX.data[6] = s;
+		ROTATION_X_MATRIX.data[9] = -s;
 		ROTATION_X_MATRIX.data[10] = c;
 
 		this.appendMatrix(ROTATION_X_MATRIX);
@@ -239,8 +211,8 @@ export class Matrix4x4 {
 		let s = FAST_SIN[p_rotation];
 
 		ROTATION_Z_MATRIX.data[0] = c;
-		ROTATION_Z_MATRIX.data[1] = -s;
-		ROTATION_Z_MATRIX.data[4] = s;
+		ROTATION_Z_MATRIX.data[1] = s;
+		ROTATION_Z_MATRIX.data[4] = -s;
 		ROTATION_Z_MATRIX.data[5] = c;
 
 		this.appendMatrix(ROTATION_Z_MATRIX);
@@ -299,18 +271,18 @@ export class Matrix4x4 {
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
 	public appendTransform(
-		x: number,
-		y: number,
-		z: number,
-		scaleX: number,
-		scaleY: number,
-		scaleZ: number,
-		rotationX: number,
-		rotationY: number,
-		rotationZ: number,
-		pivotX: number,
-		pivotY: number,
-		pivotZ: number
+		x: number = 0,
+		y: number = 0,
+		z: number =0,
+		scaleX: number = 1,
+		scaleY: number = 1,
+		scaleZ: number = 1,
+		rotationX: number = 0,
+		rotationY: number = 0,
+		rotationZ: number = 0,
+		pivotX: number = 0,
+		pivotY: number = 0,
+		pivotZ: number = 0
 	): Matrix4x4 {
 
 		return this.translate(x + pivotX, y + pivotY, z + pivotZ)
@@ -608,7 +580,7 @@ export class Matrix4x4 {
 	 * @memberOf Matrix4x4
 	 * @return {String} a string representation of the instance.
 	 **/
-	public str(): string {
+	public toString(): string {
 		let data = this.data;
 		return '[\n' + data[0] + ', ' + data[1] + ', ' + data[2] + ', ' + data[3] +
 			'\n, ' + data[4] + ', ' + data[5] + ', ' + data[6] + ', ' + data[7] +
@@ -684,8 +656,8 @@ export class Matrix4x4 {
 
 const ROTATION_X_MATRIX: Matrix4x4 = new Matrix4x4(
 	1, 0, 0, 0,
-	0, FAST_COS[0], -FAST_SIN[0], 0,
-	0, FAST_SIN[0], FAST_COS[0], 0,
+	0, FAST_COS[0], FAST_SIN[0], 0,
+	0, -FAST_SIN[0], FAST_COS[0], 0,
 	0, 0, 0, 1
 );
 
@@ -697,8 +669,8 @@ const ROTATION_Y_MATRIX: Matrix4x4 = new Matrix4x4(
 );
 
 const ROTATION_Z_MATRIX: Matrix4x4 = new Matrix4x4(
-	FAST_COS[0], -FAST_SIN[0], 0, 0,
-	FAST_SIN[0], FAST_COS[0], 0, 0,
+	FAST_COS[0], FAST_SIN[0], 0, 0,
+	-FAST_SIN[0], FAST_COS[0], 0, 0,
 	0, 0, 1, 0,
 	0, 0, 0, 1
 );
