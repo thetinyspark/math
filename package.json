@@ -5,7 +5,7 @@
   "main": "dist/lib/index.js",
   "type": "dist/lib/index.ts",
   "scripts": {
-    "build": "tsc", 
+    "build": "tsc",
     "test": "npm run build && jasmine",
     "doc": "node_modules/.bin/typedoc --out dist/docs --mode modules --exclude spec/**/*",
     "deploy": "npm run test && npm run doc"
