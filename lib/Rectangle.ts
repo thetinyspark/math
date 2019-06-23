@@ -110,4 +110,24 @@ export class Rectangle {
 	* @description The sum of the y and height properties.
 	**/
 	public bottom:number = 0;
+
+	/**
+	 * Returns a string JSON representation of this object.
+	 * @method toJSON
+	 * @memberOf Rectangle
+	 * @return {String} a string representation of the instance (JSON format)
+	 **/
+	public toJSON(): string {
+		return JSON.stringify(this);
+	};
+
+	/**
+	 * Returns a clone of the Rectangle instance.
+	 * @method clone
+	 * @memberOf Rectangle
+	 * @return {Rectangle} a clone of the Point instance.
+	 **/
+	public clone(): Rectangle {
+		return new Rectangle(this.x, this.y, this.width, this.height);
+	};
 }

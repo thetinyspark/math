@@ -65,14 +65,35 @@ export class Point3D {
 		this.z = z;
 	}
 
-/**
-* @method getDistanceBetween
-* @description returns a distance between two points
-* @memberOf Point
-* @param {Point} pointA
-* @param {Point} pointB
-* @returns {number}
-**/
+
+	/**
+	 * Returns a string JSON representation of this object.
+	 * @method toJSON
+	 * @memberOf Point3D
+	 * @return {String} a string representation of the instance (JSON format)
+	 **/
+	public toJSON(): string {
+		return JSON.stringify(this);
+	};
+
+	/**
+	 * Returns a clone of the Point3D instance.
+	 * @method clone
+	 * @memberOf Point3D
+	 * @return {Point3D} a clone of the Point instance.
+	 **/
+	public clone(): Point3D {
+		return new Point3D(this.x, this.y, this.z);
+	};
+
+	/**
+	* @method getDistanceBetween
+	* @description returns a distance between two points
+	* @memberOf Point
+	* @param {Point} pointA
+	* @param {Point} pointB
+	* @returns {number}
+	**/
 	public static getDistanceBetween(pointA: Point3D, pointB: Point3D): number {
 		let distX: number = (pointB.x - pointA.x) * (pointB.x - pointA.x);
 		let distY: number = (pointB.y - pointA.y) * (pointB.y - pointA.y);
