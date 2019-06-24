@@ -65,7 +65,7 @@ describe('test Matrix2D class', () => {
             let point: Point = new Point(100, 0);
             let mat: Matrix2D = new Matrix2D();
 
-            mat.rotate(90);
+            mat.rotate(450);
             mat.transformPoint(point.x, point.y, point);
 
             expect(point.x).toBe(0);
@@ -139,10 +139,10 @@ describe('test Matrix2D class', () => {
         "should skew the point properly",
         () => {
             let mat: Matrix2D = new Matrix2D();
-            let point: Point = mat.skew(-45, 0).transformPoint(0, 100);
+            let point: Point = mat.skew(-405, 0).transformPoint(0, 100);
             expect(point.x).toEqual(100);
 
-            point = mat.identity().skew(0,45).transformPoint(100,0);
+            point = mat.identity().skew(0,405).transformPoint(100,0);
             expect(point.y).toEqual(100);
         }
     );
@@ -243,7 +243,7 @@ describe('test Matrix2D class', () => {
             mat2.scale(2, 2);
             mat3.rotate(90);
 
-            mat0.translate(100, 100).scale(2, 2).rotate(90);
+            mat0.translate(100, 100).scale(2, 2).rotate(450);
             mat1.combine([mat2, mat3]);
 
             expect(mat0.toJSON()).toEqual(mat1.toJSON());
@@ -287,7 +287,7 @@ describe('test Matrix2D class', () => {
             expect(point.x).toEqual(-100);
             expect(point.y).toEqual(100);
 
-            mat.identity().append(1, 0, 0, 1, 100, 100).rotate(90).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
+            mat.identity().append(1, 0, 0, 1, 100, 100).rotate(450).append(2, 0, 0, 2, 0, 0).transformPoint(0, 0, point);
             expect(point.x).toEqual(100);
             expect(point.y).toEqual(100);
         }
@@ -379,7 +379,7 @@ describe('test Matrix2D class', () => {
             let mat1: Matrix2D = new Matrix2D();
             let mat2: Matrix2D = new Matrix2D();
 
-            mat1.translate(100, 100).scale(2, 2).rotate(50);
+            mat1.translate(100, 100).scale(2, 2).rotate(410);
             mat2.copy(mat1).invert();
 
             expect(mat1.appendMatrix(mat2).isIdentity()).toBe(true);
