@@ -1,6 +1,6 @@
 {
   "name": "@thetinyspark/maths",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple & usefull maths library",
   "main": "dist/lib/index.js",
   "type": "dist/lib/index.ts",
