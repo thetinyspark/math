@@ -168,6 +168,7 @@ export class Matrix4x4 {
 
 		p_rotation = p_rotation % 360;
 		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
+		p_rotation = p_rotation >> 0;
 
 
 		let c = FAST_COS[p_rotation];
@@ -193,6 +194,8 @@ export class Matrix4x4 {
 
 		p_rotation = p_rotation % 360;
 		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
+		p_rotation = p_rotation >> 0;
+
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];
 
@@ -217,6 +220,7 @@ export class Matrix4x4 {
 
 		p_rotation = p_rotation % 360;
 		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
+		p_rotation = p_rotation >> 0;
 
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];

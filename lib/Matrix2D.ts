@@ -342,7 +342,7 @@ export class Matrix2D {
 		// rotation
 		// translate back pivot
 
-		let r = (rotation % 360 < 0) ? 360 + (rotation % 360) : rotation % 360;
+		let r = (rotation % 360 < 0) ? (360 + (rotation % 360)) >> 0 : (rotation % 360) >> 0;
 		let cos = FAST_COS[r];
 		let sin = FAST_SIN[r];
 
@@ -351,6 +351,9 @@ export class Matrix2D {
 
 		skewX = (skewX < 0) ? 360 + skewX : skewX;
 		skewY = (skewY < 0) ? 360 + skewY : skewY;
+
+		skewX = skewX >> 0;
+		skewY = skewY >> 0;
 
 		x += pivotX;
 		y += pivotY;
@@ -377,7 +380,7 @@ export class Matrix2D {
 	 **/
 	public rotate(angle: number): Matrix2D {
 
-		let r = (angle % 360 < 0) ? 360 + (angle % 360) : angle % 360;
+		let r = (angle % 360 < 0) ? (360 + (angle % 360)) >> 0 : (angle % 360) >> 0;
 		let cos = FAST_COS[r];
 		let sin = FAST_SIN[r];
 
@@ -399,6 +402,8 @@ export class Matrix2D {
 
 		skewX = (skewX < 0) ? 360 + skewX : skewX;
 		skewY = (skewY < 0) ? 360 + skewY : skewY;
+		skewX = skewX >> 0;
+		skewY = skewY >> 0;
 
 		return this.append(1, FAST_TAN[skewY], -FAST_TAN[skewX], 1, 0, 0);
 	};
