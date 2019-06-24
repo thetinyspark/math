@@ -188,8 +188,8 @@ describe('test Matrix4x4 class', () => {
             let mat: Matrix4x4 = new Matrix4x4();
             let point: Point3D = null;
 
-            mat.identity().rotateX(90).rotateY(90).rotateZ(90)
-            expect(mat.data).toEqual(mat.clone().identity().rotate(90, 90, 90).data);
+            mat.identity().rotateX(450).rotateY(450).rotateZ(450);
+            expect(mat.data).toEqual(mat.clone().identity().rotate(450, 450, 450).data);
         }
     );
 

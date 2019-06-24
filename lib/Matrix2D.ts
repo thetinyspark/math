@@ -342,9 +342,15 @@ export class Matrix2D {
 		// rotation
 		// translate back pivot
 
-		let r = (rotation % 360) >> 0;
+		let r = (rotation % 360 < 0) ? 360 + (rotation % 360) : rotation % 360;
 		let cos = FAST_COS[r];
 		let sin = FAST_SIN[r];
+
+		skewX = skewX % 360;
+		skewY = skewY % 360;
+
+		skewX = (skewX < 0) ? 360 + skewX : skewX;
+		skewY = (skewY < 0) ? 360 + skewY : skewY;
 
 		x += pivotX;
 		y += pivotY;
@@ -371,7 +377,7 @@ export class Matrix2D {
 	 **/
 	public rotate(angle: number): Matrix2D {
 
-		let r = (angle % 360) >> 0;
+		let r = (angle % 360 < 0) ? 360 + (angle % 360) : angle % 360;
 		let cos = FAST_COS[r];
 		let sin = FAST_SIN[r];
 
@@ -391,10 +397,10 @@ export class Matrix2D {
 		skewX = skewX % 360;
 		skewY = skewY % 360;
 
-		skewX = ( skewX < 0 ) ? 360 + skewX : skewX;
-		skewY = ( skewY < 0 ) ? 360 + skewY : skewY;
+		skewX = (skewX < 0) ? 360 + skewX : skewX;
+		skewY = (skewY < 0) ? 360 + skewY : skewY;
 
-		return this.append(1,FAST_TAN[skewY], -FAST_TAN[skewX],1,0, 0);
+		return this.append(1, FAST_TAN[skewY], -FAST_TAN[skewX], 1, 0, 0);
 	};
 
 	/**
@@ -494,7 +500,7 @@ export class Matrix2D {
 	public decompose(target: any = null): any {
 		// TODO: it would be nice to be able to solve for whether the matrix can be decomposed into only scale/rotation
 		// even when scale is negative
-		if (target == null) 
+		if (target == null)
 			target = {};
 
 		target.x = this.tx;
@@ -564,7 +570,7 @@ export class Matrix2D {
 	* @description Exports the current Matrix2D to a flat array of data
 	* @returns Array a flat array of data
 	**/
-	public toArray(): number[]{
+	public toArray(): number[] {
 		return [this.a, this.b, this.c, this.d, this.tx, this.ty];
 	};
 

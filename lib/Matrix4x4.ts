@@ -166,6 +166,10 @@ export class Matrix4x4 {
 	**/
 	public rotateX(p_rotation: number): Matrix4x4 {
 
+		p_rotation = p_rotation % 360;
+		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
+
+
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];
 
@@ -186,6 +190,9 @@ export class Matrix4x4 {
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
 	public rotateY(p_rotation: number): Matrix4x4 {
+
+		p_rotation = p_rotation % 360;
+		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];
 
@@ -207,6 +214,10 @@ export class Matrix4x4 {
 	* @returns {Matrix4x4} This instance. Useful for chaining method calls.
 	**/
 	public rotateZ(p_rotation: number): Matrix4x4 {
+
+		p_rotation = p_rotation % 360;
+		p_rotation = (p_rotation < 0) ? 360 + p_rotation : p_rotation;
+
 		let c = FAST_COS[p_rotation];
 		let s = FAST_SIN[p_rotation];
 
@@ -273,7 +284,7 @@ export class Matrix4x4 {
 	public appendTransform(
 		x: number = 0,
 		y: number = 0,
-		z: number =0,
+		z: number = 0,
 		scaleX: number = 1,
 		scaleY: number = 1,
 		scaleZ: number = 1,
