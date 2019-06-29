@@ -4,5 +4,6 @@ export {Point} from './Point';
 export {Point3D} from './Point3D';
 export {Rectangle} from './Rectangle';
 export {Vector3D} from './Vector3D';
+export {Quaternion} from './Quaternion';
 export {DEG_TO_RAD,FAST_TAN,FAST_COS,FAST_SIN,RAD_TO_DEG,findAngleInTriangle,getNextPowerOf2,isoToScreen,screenToIso} from './utils';
 
