@@ -84,4 +84,22 @@ describe('test Vector3D class', () => {
             expect( Math.round(angle)).toBe(90);
         }
     );
+
+    it(
+        "should calculate the length of the vector",
+        () => {
+            vector1.x = vector1.y = vector1.z = 0;
+            expect(vector1.getLength()).toBe(1);
+        }
+    );
+
+    
+    it(
+        "should normalize the vector",
+        () => {
+            vector1.x = vector1.y = vector1.z = 3;
+            vector1.normalize();
+            expect(vector1.getLength()).toBe(1);
+        }
+    );
 });

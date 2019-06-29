@@ -69,7 +69,7 @@ export class Vector3D {
 	* @type {number}
 	* @description The fourth element of a Vector3D object (in addition to the x, y, and z properties) can hold data such as the angle of rotation.
 	**/
-	public w: number = 0;
+	public w: number = 1;
 
 	/**
 	 * Returns a string JSON representation of this object.
@@ -94,8 +94,8 @@ export class Vector3D {
 	/**
 	* @method crossProduct
 	* @memberOf Vector3D
-	* @param {tomahawk_ns.Vector3D} vector A second Vector3D object.
-	* @returns {tomahawk_ns.Vector3D} This Vector3D. Useful for chaining method calls.
+	* @param {Vector3D} vector A second Vector3D object.
+	* @returns {Vector3D} This Vector3D. Useful for chaining method calls.
 	* @description Returns a new Vector3D object that is perpendicular (at a right angle) to the current Vector3D and another Vector3D object.
 	**/
 	public crossProduct(vector): Vector3D {
@@ -108,5 +108,44 @@ export class Vector3D {
 		this.z = z;
 		return new Vector3D(x, y, z, this.w);
 	};
+
+	/**
+	* @method getLength returns vector's length 
+	* @memberOf Vector3D
+	* @param {number} precision the decimal precision, default 2
+	* @description Returns the length of the vector
+	**/
+	public getLength(precision:number = 2):number{
+		let x = this.x;
+		let y = this.y;
+		let z = this.z;
+		let w = this.w;
+		let len = x * x + y * y + z * z + w * w;
+		return Math.round( Math.pow(10,precision) * len ) / Math.pow(10,precision);
+	}
+
+	/**
+	* @method normalize normalizes this vector
+	* @memberOf Vector3D
+	* @description Returns this vector. Useful for chaining method calls
+	**/
+	public normalize(): Vector3D {
+		let x = this.x;
+		let y = this.y;
+		let z = this.z;
+		let w = this.w;
+		let len = x * x + y * y + z * z + w * w;
+		
+		if (len > 0) {
+			len = 1 / Math.sqrt(len);
+		}
+		
+		this.x = x * len;
+		this.y = y * len;
+		this.z = z * len;
+		this.w = w * len;
+		
+		return this;
+	}
 
 }
